@@ -79,13 +79,16 @@ class HomeWidgetPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "updateWidget" -> {
                 val qualifiedName = call.argument<String>("qualifiedAndroidName")
                 val className = call.argument<String>("android") ?: call.argument<String>("name")
+                val androidIsUsingGlance = call.argument<Boolean>("androidIsUsingGlance") ?: false
                 try {
                     val javaClass = Class.forName(qualifiedName ?: "${context.packageName}.${className}")
+                    val ids: IntArray = AppWidgetManager.getInstance(context.applicationContext).getAppWidgetIds(ComponentName(context, javaClass))
+
                     val intent = Intent(context, javaClass)
                     intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-                    val ids: IntArray = AppWidgetManager.getInstance(context.applicationContext).getAppWidgetIds(ComponentName(context, javaClass))
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
                     context.sendBroadcast(intent)
+
                     result.success(true)
                 } catch (classException: ClassNotFoundException) {
                     result.error("-3", "No Widget found with Name $className. Argument 'name' must be the same as your AppWidgetProvider you wish to update", classException)

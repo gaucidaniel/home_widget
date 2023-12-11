@@ -142,22 +142,7 @@ void main() {
     final callbackHandle =
         PluginUtilities.getCallbackHandle(testCallback)?.toRawHandle();
 
-    // ignore: deprecated_member_use_from_same_package
     expect(await HomeWidget.registerBackgroundCallback(testCallback), true);
-
-    final argument = await passedArguments.future;
-
-    expect(argument[0], dispatcherHandle);
-    expect(argument[1], callbackHandle);
-  });
-
-  test('Register Interactivity Callback passes Handles', () async {
-    final dispatcherHandle =
-        PluginUtilities.getCallbackHandle(callbackDispatcher)?.toRawHandle();
-    final callbackHandle =
-        PluginUtilities.getCallbackHandle(testCallback)?.toRawHandle();
-
-    expect(await HomeWidget.registerInteractivityCallback(testCallback), true);
 
     final argument = await passedArguments.future;
 
@@ -342,6 +327,6 @@ void emitEvent(ByteData? event) {
   );
 }
 
-Future<void> testCallback(Uri? uri) async {
+void testCallback(Uri? uri) {
   debugPrint('Called TestCallback');
 }

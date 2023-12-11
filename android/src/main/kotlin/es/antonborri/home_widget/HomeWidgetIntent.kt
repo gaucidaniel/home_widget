@@ -23,6 +23,15 @@ object HomeWidgetLaunchIntent {
 
         return PendingIntent.getActivity(context, 0, intent, flags)
     }
+
+    fun <T> getIntent(context: Context, activityClass: Class<T>, uri: Uri? = null): Intent where T : Activity {
+        val intent = Intent(context, activityClass)
+        intent.data = uri
+        intent.action = HOME_WIDGET_LAUNCH_ACTION
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+        return intent
+    }
 }
 
 
